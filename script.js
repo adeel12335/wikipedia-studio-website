@@ -40,6 +40,54 @@
     $$('.reveal').forEach(element => element.classList.add('in-view'));
   }
 
+  // Numeric proof points count up once when they enter the viewport.
+  const counters = $$('.metrics-rail strong, .experience-stat strong');
+
+  function animateCounter(element) {
+    if (element.dataset.counted === 'true') return;
+
+    const finalText = element.textContent.trim();
+    const match = finalText.match(/^(\d+)([+%]?)$/);
+    if (!match) return;
+
+    const target = Number(match[1]);
+    const suffix = match[2];
+    element.dataset.counted = 'true';
+    element.setAttribute('aria-label', finalText);
+
+    if (reducedMotion) {
+      element.textContent = finalText;
+      return;
+    }
+
+    const duration = 1350;
+    let startedAt = null;
+    const tick = timestamp => {
+      if (startedAt === null) startedAt = timestamp;
+      const progress = Math.min((timestamp - startedAt) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      element.textContent = `${Math.round(target * eased)}${suffix}`;
+      if (progress < 1) window.requestAnimationFrame(tick);
+      else element.textContent = finalText;
+    };
+
+    element.textContent = `0${suffix}`;
+    window.requestAnimationFrame(tick);
+  }
+
+  if ('IntersectionObserver' in window) {
+    const counterObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        animateCounter(entry.target);
+        counterObserver.unobserve(entry.target);
+      });
+    }, { threshold: .45 });
+    counters.forEach(counter => counterObserver.observe(counter));
+  } else {
+    counters.forEach(animateCounter);
+  }
+
   // Mobile and tablet carousel helper
   function createCarousel({ trackSelector, prevSelector, nextSelector, dotsSelector, tabletVisible = 2 }) {
     const track = $(trackSelector);
@@ -235,6 +283,7 @@
   const testimonialWindow = $('#testimonialWindow');
   const testimonialDots = $('#testimonialDots');
   const testimonialStage = $('.testimonial-stage');
+  const testimonialCurrent = $('#testimonialCurrent');
   let testimonialIndex = 0;
   let testimonialTimer = null;
   let testimonialTransitionTimer = null;
@@ -245,6 +294,7 @@
     const item = testimonials[testimonialIndex];
     testimonialWindow.innerHTML = `<blockquote>${item.quote}</blockquote><div><strong>${item.name}</strong><span>${item.role}</span></div>`;
     testimonialWindow.dataset.testimonialIndex = String(testimonialIndex);
+    if (testimonialCurrent) testimonialCurrent.textContent = String(testimonialIndex + 1).padStart(2, '0');
     testimonialWindow.classList.remove('is-leaving', 'is-entering');
     if (animate && !reducedMotion) {
       void testimonialWindow.offsetWidth;

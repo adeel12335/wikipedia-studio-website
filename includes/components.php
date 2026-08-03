@@ -64,23 +64,31 @@ function page_hero(array $args): void
       <div class="page-hero-glow" aria-hidden="true"></div>
       <div class="shell">
         <?php breadcrumb_trail((array) ($args['breadcrumbs'] ?? []), (string) ($args['current'] ?? '')); ?>
-        <div class="page-hero-copy">
-          <?php if (!empty($args['eyebrow'])): ?>
-            <p class="micro-label"><?= e($args['eyebrow']) ?></p>
-          <?php endif; ?>
-          <h1 id="page-title"><?= $args['h1'] /* trusted markup */ ?></h1>
-          <?php if (!empty($args['lede'])): ?>
-            <p class="page-hero-lede"><?= e($args['lede']) ?></p>
-          <?php endif; ?>
-          <?php if (!empty($args['actions'])): ?>
-            <div class="hero-actions">
-              <?php foreach ($args['actions'] as $action): ?>
-                <a class="button <?= e($action['style'] ?? 'button-gold') ?> magnetic" href="<?= e($action['href']) ?>">
-                  <?= e($action['label']) ?> <?= icon('i-arrow') ?>
-                </a>
-              <?php endforeach; ?>
-            </div>
-          <?php endif; ?>
+        <div class="page-hero-layout">
+          <div class="page-hero-copy">
+            <?php if (!empty($args['eyebrow'])): ?>
+              <p class="micro-label"><?= e($args['eyebrow']) ?></p>
+            <?php endif; ?>
+            <h1 id="page-title"><?= $args['h1'] /* trusted markup */ ?></h1>
+            <?php if (!empty($args['lede'])): ?>
+              <p class="page-hero-lede"><?= e($args['lede']) ?></p>
+            <?php endif; ?>
+            <?php if (!empty($args['actions'])): ?>
+              <div class="hero-actions">
+                <?php foreach ($args['actions'] as $action): ?>
+                  <a class="button <?= e($action['style'] ?? 'button-gold') ?> magnetic" href="<?= e($action['href']) ?>">
+                    <?= e($action['label']) ?> <?= icon('i-arrow') ?>
+                  </a>
+                <?php endforeach; ?>
+              </div>
+            <?php endif; ?>
+          </div>
+          <div class="page-hero-visual" aria-hidden="true">
+            <span class="page-hero-orbit orbit-one"></span>
+            <span class="page-hero-orbit orbit-two"></span>
+            <img src="<?= e(asset('assets/globe.png')) ?>" alt="" width="720" height="596">
+            <i class="page-hero-rule"></i>
+          </div>
         </div>
       </div>
     </section>
@@ -125,8 +133,8 @@ function cta_band(
     ?>
     <section class="contact" id="contact">
       <div class="shell contact-panel reveal">
-        <img src="<?= e(asset('assets/globe-small.png')) ?>" alt="" aria-hidden="true" width="66" height="55">
-        <div>
+        <img class="contact-art" src="<?= e(asset('assets/globe.png')) ?>" alt="" aria-hidden="true" width="720" height="596">
+        <div class="contact-copy">
           <h2><?= $heading /* trusted markup */ ?></h2>
           <p><?= e($copy) ?></p>
         </div>
@@ -144,7 +152,7 @@ function testimonial_section(): void
     ?>
     <section class="testimonials section-pad" aria-labelledby="testimonial-title">
       <div class="shell">
-        <div class="section-heading center reveal">
+        <div class="section-heading testimonial-heading reveal">
           <p class="micro-label">Client Testimonials</p>
           <h2 id="testimonial-title">What Our Clients Say</h2>
         </div>
@@ -156,6 +164,9 @@ function testimonial_section(): void
             <div><strong><?= e($first['name']) ?></strong><span><?= e($first['role']) ?></span></div>
           </div>
           <button class="round-arrow next" id="testimonialNext" type="button" aria-label="Next testimonial"><?= icon('i-arrow') ?></button>
+          <div class="testimonial-progress" aria-hidden="true">
+            <span id="testimonialCurrent">01</span><i></i><span><?= str_pad((string) count($items), 2, '0', STR_PAD_LEFT) ?></span>
+          </div>
         </div>
         <div class="rail-dots testimonial-dots" id="testimonialDots" aria-label="Testimonials"></div>
       </div>

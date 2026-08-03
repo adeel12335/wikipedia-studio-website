@@ -69,7 +69,7 @@ function portfolio_published(): array
         $rows = db()
             ->query("SELECT * FROM portfolio_items WHERE status = 'published' ORDER BY sort_order ASC, id ASC")
             ->fetchAll();
-    } catch (Throwable) {
+    } catch (Throwable $exception) {
         return portfolio_fallback_items();
     }
 

@@ -99,7 +99,7 @@ function db_ready(): bool
     try {
         db()->query('SELECT 1 FROM portfolio_items LIMIT 1');
         $ready = true;
-    } catch (Throwable) {
+    } catch (Throwable $exception) {
         $ready = false;
     }
 

@@ -30,7 +30,7 @@ $footerServices = services();
         </div>
       </div>
 
-      <div>
+      <div class="footer-column footer-links">
         <h3>Quick Links</h3>
         <?php /* Prefixed names: partials share the including page's scope. */ ?>
         <?php foreach (nav_items() as $footerNavItem): ?>
@@ -38,14 +38,14 @@ $footerServices = services();
         <?php endforeach; ?>
       </div>
 
-      <div>
+      <div class="footer-column footer-services">
         <h3>Services</h3>
         <?php foreach ($footerServices as $footerSlug => $footerService): ?>
           <a href="<?= e(url('services/' . $footerSlug)) ?>"><?= e($footerService['name']) ?></a>
         <?php endforeach; ?>
       </div>
 
-      <div>
+      <div class="footer-column footer-contact">
         <h3>Contact Us</h3>
         <a href="mailto:<?= e(SITE_EMAIL) ?>"><?= e(SITE_EMAIL) ?></a>
         <a href="tel:<?= e(SITE_PHONE_RAW) ?>"><?= e(SITE_PHONE) ?></a>
