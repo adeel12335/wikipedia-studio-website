@@ -200,9 +200,22 @@ at roughly 40–60 words so they stand alone if quoted.
 Run the checker against a local server:
 
 ```bash
-php -S localhost:8000 &
+php -S localhost:8000 router-dev.php &
 php bin/check-seo-gates.php http://localhost:8000
 ```
+
+### Live site checks
+
+`bin/check-live-seo.php` audits a deployed site for the problems that stop Google
+indexing it — unreachable sitemap, `noindex`, broken sitemap URLs, www/non-www
+duplication, missing HTTPS redirect, soft 404s, and exposed private files:
+
+```bash
+php bin/check-live-seo.php https://thewikipediastudio.com
+```
+
+It exits non-zero while any blocker remains. `docs/SEO-LAUNCH-CHECKLIST.md` is the
+prioritised task list that goes with it.
 
 ### Known E-E-A-T gap
 

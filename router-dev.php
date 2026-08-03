@@ -43,5 +43,15 @@ if ($path === '/robots.txt') {
     return true;
 }
 
+// Unknown paths get the 404 page, mirroring "ErrorDocument 404 /404.php" so that
+// local testing sees the same status codes production returns.
+if (!is_file($target) && !is_dir($target)) {
+    http_response_code(404);
+
+    require __DIR__ . '/404.php';
+
+    return true;
+}
+
 // Anything else: let the built-in server serve it normally.
 return false;
