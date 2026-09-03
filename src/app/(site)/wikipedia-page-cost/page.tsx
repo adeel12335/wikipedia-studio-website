@@ -26,7 +26,9 @@ const pageUrl = absUrl(pageSlug);
 const offerNodes = pricingTiers.map((tier) => ({
   "@type": "Offer",
   name: tier.name,
-  description: `${tier.bestFor}. ${tier.features.sources}. ${tier.features.editors}. ${tier.features.monitoring} monitoring.`,
+  description: `${tier.bestFor}. ${tier.features.sources}. ${tier.features.editors}.${
+    tier.features.monitoring ? ` ${tier.features.monitoring} monitoring.` : ""
+  }`,
   priceSpecification: {
     "@type": "PriceSpecification",
     price: String(tier.price),
@@ -231,10 +233,12 @@ export default function WikipediaPageCostPage() {
                     <Icon name="i-check" />
                     {tier.features.editors}
                   </li>
-                  <li>
-                    <Icon name="i-check" />
-                    {tier.features.monitoring} monitoring
-                  </li>
+                  {tier.features.monitoring ? (
+                    <li>
+                      <Icon name="i-check" />
+                      {tier.features.monitoring} monitoring
+                    </li>
+                  ) : null}
                   <li>
                     <Icon name="i-check" />
                     {tier.features.revisions}
